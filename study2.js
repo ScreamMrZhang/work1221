@@ -154,3 +154,82 @@ MyArray.myPrototype={
 var myArray = new MyArray(1,2,3,4,5,6);
 console.log(myArray);
 
+// 直接调用构造函数 后果就是定义了全局变量
+// window.myArray(1,23);
+
+//如何判断一个对象就是某个构造函数的实例
+// [] instanceof
+
+// 构造函数 原型对象 实例
+/*
+构造函数
+实例 = new 构造函数();
+原型对象 = 构造函数.prototype
+ */
+
+/*
+原型对象
+实例 = new 原型对象.constructor
+构造函数 = 构造函数.constructor
+ */
+/*
+实例
+原型对象 = 实例.__proto__
+构造函数 = 实例.__proto__.constructor
+ */
+
+
+function Person(name, age) {
+    //实例属性
+    this.name = name;
+    this.age = age;
+    //实例方法
+    this.fn=function () {
+
+    }
+}
+//静态属性
+Person.prototype={
+    // 公共属性/公共方法
+    speck:function () {
+        console.log("speck")
+    }
+}
+Person.init=function () {
+    console.log("init")
+}
+var o5 = new Object();
+var o6={a:1,b:false,c:undefined};
+//将对象的所有key值转化为数组结构
+Object.keys(o6);
+//将对象所有的value转化为数组结构
+Object.values(o6);
+//将对象所有的键值对转化为数组结构
+Object.entries(o6);
+
+
+console.log(Object.keys(o6));
+//将对象所有的value转化为数组结构
+console.log(Object.values(o6));
+//将对象所有的键值对转化为数组结构
+console.log(Object.entries(o6));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
