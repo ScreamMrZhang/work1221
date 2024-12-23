@@ -55,6 +55,8 @@ function MyArray() {
     this.length=arguments.length;
 }
 MyArray.myPrototype={
+    // 在原型上有一个固定的属性是必须提供的 constructor 构造器
+    constructor:MyArray,
     push:function (value) {
         this[this.length] = value;
         this.length++;
