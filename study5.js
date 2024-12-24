@@ -65,5 +65,69 @@ trip1.start();
 trip1.end();
 
 //________________________________
+function Floor(name) {
+    this.name=name;
+    this.number=100;
+}
+Floor.prototype={
+    show:function () {
+        console.log(`${this.name}--剩余车位：${this.number}`);
+    }
+}
+function Parking(stopCar,floor,name) {
+    this.stopCar=stopCar;
+    this.floor=floor;
+    this.name=name;
+    this.flag=false;
+}
+Parking.prototype={
+    stopThisCar:function () {
+        this.flag=true;
+        this.floor.number--;
+    },
+    leaveCar:function (stopTime) {
+        this.flag=false;
+        this.stopCar.outTime=this.stopCar.inTime+stopTime;
+        this.floor.number++;
+    }
+}
+function StopCar(number) {
+    this.number = number;
+    this.inTime = undefined;
+    this.outTime = undefined;
+}
+
+function Camera(name,car,floor) {
+    this.name=name;
+    this.car=car;
+    this.floor=floor;
+}
+Camera.prototype={
+    carInBefore:function () {
+        this.floor.show();
+    },
+    carIn:function (inTime) {
+        this.car.inTime=inTime;
+        console.log(`车牌号：${this.car.number}-进场时间：${this.car.inTime}`);
+    },
+    carOut:function () {
+        // this.car.outTime=outTime;
+        console.log(`车牌号：${this.car.number}-停车时间：${this.car.outTime-this.car.inTime}`);
+    }
+}
+var inTime = new Date().getTime();
+var floorOne = new Floor("一层");
+var stopCar1 = new StopCar("京A88888");
+var camera = new Camera("入口摄像头",stopCar1,floorOne);
+var parking = new Parking(stopCar1,floorOne,"一层-001");
+
+camera.carInBefore();
+camera.carIn(inTime);
+parking.stopThisCar();
+camera.carInBefore();
+parking.leaveCar(3600000);
+camera.carOut();
+
+
 
 
