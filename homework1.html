@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图像功能实现</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* 左侧缩略图区域 */
+        .thumbnail-area {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .thumbnail-area img {
+            width: 80px;
+            height: 60px;
+            cursor: pointer;
+            object-fit: cover;
+            border: 2px solid transparent;
+        }
+
+        .thumbnail-area img.active {
+            border-color: blue;
+        }
+
+        /* 中间大图区域 */
+        .main-image-area {
+            position: relative;
+        }
+
+        .main-image {
+            width: 400px;
+            height: 300px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+        }
+
+        /* 右侧放大镜区域 */
+        .magnifier-area {
+            width: 200px;
+            height: 200px;
+            border: 1px solid #ccc;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .magnifier-image {
+            position: absolute;
+            width: 800px; /* 大图的2倍尺寸 */
+            height: 600px;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 左侧缩略图区域 -->
+    <div class="thumbnail-area">
+        <img src="./images/1.jpg">
+        <img src="./images/2.jpg">
+        <img src="./images/3.jpg">
+        <img src="./images/4.jpg">
+        <img src="./images/5.jpg">
+    </div>
+
+    <!-- 中间大图区域 -->
+    <div class="main-image-area">
+        <img src="./images/1.jpg" alt="Main Image" class="main-image">
+    </div>
+
+    <!-- 右侧放大镜区域 -->
+    <div class="magnifier-area">
+        <img src="./images/1.jpg" alt="Magnified Image" class="magnifier-image">
+    </div>
+</div>
+
+<script>
+    const thumbnails = document.querySelectorAll('.thumbnail-area img');
+    const mainImage = document.querySelector('.main-image');
+    const magnifierImage = document.querySelector('.magnifier-image');
+    const magnifierArea = document.querySelector('.magnifier-area');
+
+    // 更新大图和放大镜图片
+    thumbnails.forEach(thumbnail => {
+        thumbnail.addEventListener('click', () => {
+            // 移除其他缩略图的高亮
+            thumbnails.forEach(img => img.classList.remove('active'));
+            thumbnail.classList.add('active');
+
+            // 更新中间大图和放大镜图片
+            const largeImageURL = thumbnail.getAttribute('src');
+            mainImage.src = largeImageURL;
+            magnifierImage.src = largeImageURL;
+        });
+    });
+
+    // 放大镜效果
+    mainImage.addEventListener('mousemove', (e) => {
+        const rect = mainImage.getBoundingClientRect();
+        const magnifierRect = magnifierArea.getBoundingClientRect();
+
+        // 鼠标相对大图的坐标
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        // 确保鼠标范围不超出图片边界
+        const safeX = Math.max(0, Math.min(x, rect.width));
+        const safeY = Math.max(0, Math.min(y, rect.height));
+
+        // 计算放大镜的偏移
+        const xPercent = (safeX / rect.width) * 100; // 百分比位置
+        const yPercent = (safeY / rect.height) * 100;
+
+        magnifierImage.style.transform = `translate(-${xPercent}%, -${yPercent}%)`;
+    });
+
+    // 清除放大镜效果
+    mainImage.addEventListener('mouseleave', () => {
+        magnifierImage.style.transform = 'translate(-50%, -50%)';
+    });
+</script>
+</body>
+</html>
